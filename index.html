@@ -1,0 +1,193 @@
+<?php header("Content-Type: text/html; charset=utf-8"); ?>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chuyển hướng đến KHO CODE VIỆT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Orbitron', sans-serif;
+      background: black;
+      color: #fff;
+    }
+
+    #matrix {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
+      height: 100vh;
+    }
+
+    .top-gif {
+      max-width: 100%;
+      width: 600px;
+      height: auto;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 30px #00ffc8, 0 0 60px #007cf0;
+      animation: pulseGif 3s ease-in-out infinite;
+    }
+
+    @keyframes pulseGif {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.02); opacity: 0.9; }
+    }
+
+    h1 {
+      font-size: 3rem;
+      text-shadow: 0 0 20px #00ffe7, 0 0 40px #00ffe7;
+      margin-bottom: 10px;
+    }
+
+    .brand-link {
+      font-size: 2.5rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ff00cc, #00ffff, #ff00cc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientMove 5s linear infinite;
+      margin-bottom: 20px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    .glow-text {
+      font-size: 1.4rem;
+      color: #ffcc00;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #ffcc00, 0 0 20px #ff9900;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 5px #ffcc00; }
+      to { text-shadow: 0 0 20px #ff9900, 0 0 30px #ffcc00; }
+    }
+
+    .countdown {
+      font-size: 1.8rem;
+      color: #00ffe7;
+      margin: 15px 0;
+    }
+
+    .btn {
+      padding: 16px 32px;
+      background: linear-gradient(45deg, #00ffc8, #007cf0);
+      color: black;
+      font-weight: bold;
+      font-size: 1.4rem;
+      border: none;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.4s ease-in-out;
+      box-shadow: 0 0 20px #00ffc8, 0 0 40px #007cf0;
+      animation: pulse 2s infinite;
+    }
+
+    .btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 40px #00fff7, 0 0 60px #00fff7;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 10px #00ffc8; }
+      50% { box-shadow: 0 0 30px #00ffc8; }
+    }
+
+    .note {
+      font-size: 1rem;
+      color: #ccc;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2rem; }
+      .brand-link { font-size: 1.8rem; }
+      .countdown, .glow-text { font-size: 1rem; }
+      .top-gif { width: 90%; margin-bottom: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div class="container">
+    <img src="https://i.imgur.com/iYRXw3s.gif" alt="GIF đỉnh cao" class="top-gif">
+    <h1>Đang chuyển hướng đến</h1>
+    <a href="https://khocodeviet.com" class="brand-link">KHO CODE VIỆT</a>
+    <div class="glow-text">Web bán mã nguồn, tool, acc MMO, siêu xịn - auto đẹp - auto đỉnh</div>
+    <div class="countdown">Sẵn sàng chiến trong <span id="timer">60</span> giây...</div>
+    <a href="https://khocodeviet.com" class="btn">Vô liền tay!</a>
+    <div class="note">Nếu không chuyển được, click vào nút để sang trang mới nhé!</div>
+  </div>
+
+  <script>
+    let timeLeft = 60;
+    const timer = document.getElementById('timer');
+    const interval = setInterval(() => {
+      timeLeft--;
+      timer.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        window.location.href = "https://khocodeviet.com";
+      }
+    }, 1000);
+
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array.from({ length: columns }, () => 1);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#0f0";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 33);
+    window.addEventListener("resize", () => location.reload());
+  </script>
+</body>
+</html>
